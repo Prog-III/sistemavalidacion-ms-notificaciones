@@ -22,14 +22,25 @@ def hello():
 def enviarCorreo():
     destino = request.args.get("destino")
     asunto = request.args.get("asunto")
+    saludo = request.args.get("saludo")
     mensaje = request.args.get("mensaje")
     hashString = request.args.get("hash")
     if hashString == os.environ.get("SECURITY_HASH"):
         message = Mail(
             from_email=os.environ.get("email_from"),
             to_emails=destino,
-            subject=asunto,
-            html_content=mensaje)
+            #subject=asunto,
+            #html_content=mensaje)
+            )
+            
+        message.template_id = os.environ.get("Correo-TemplateID")
+        
+        message.dynamic_template_data = {
+        'subject': asunto,
+        'saludo': saludo,
+        'clave': mensaje,
+        }
+        
         try:
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
             response = sg.send(message)
