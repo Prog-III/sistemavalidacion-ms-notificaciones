@@ -33,12 +33,13 @@ def enviarCorreo():
             #html_content=mensaje)
             )
             
+            
         message.template_id = os.environ.get("Correo-TemplateID")
         
         message.dynamic_template_data = {
         'subject': asunto,
         'saludo': saludo,
-        'clave': mensaje,
+        'mensaje': mensaje,
         }
         
         try:
