@@ -1,0 +1,4 @@
+flask
+sendgrid
+twilio
+python-dotenv

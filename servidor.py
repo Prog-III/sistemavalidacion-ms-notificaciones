@@ -4,9 +4,11 @@ Created on Tue Oct  5 12:14:51 2021
 
 @author: WOLF
 """
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 from flask import Flask
-import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from flask import request
@@ -27,19 +29,18 @@ def enviarCorreo():
     hashString = request.args.get("hash")
     if hashString == os.environ.get("SECURITY_HASH"):
         message = Mail(
-            from_email=os.environ.get("email_from"),
+            from_email=os.environ.get("EMAIL_FROM"),
             to_emails=destino,
             #subject=asunto,
             #html_content=mensaje)
             )
             
-            
-        message.template_id = os.environ.get("Correo-TemplateID")
+        message.template_id = os.environ.get("EMAIL_TEMPLATE_ID")
         
         message.dynamic_template_data = {
-        'subject': asunto,
-        'saludo': saludo,
-        'mensaje': mensaje,
+            'subject': asunto,
+            'saludo': saludo,
+            'mensaje': mensaje,
         }
         
         try:
@@ -68,7 +69,7 @@ def enviarSms():
             message = client.messages \
                             .create(
                                  body=mensaje,
-                                 from_=os.environ['phone_from'],
+                                 from_=os.environ['PHONE_FROM'],
                                  to="+57"+destino
                              )
             
